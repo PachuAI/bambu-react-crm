@@ -1,69 +1,78 @@
-# React + TypeScript + Vite
+# React Vite TypeScript Tailwind v4 Boilerplate
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Stack completo y configurado**: React 19 + Vite + TypeScript + Tailwind v4 + QA completo
 
-Currently, two official plugins are available:
+## 🚀 Quick Start
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```bash
+# Clonar este boilerplate
+git clone https://github.com/PachuAI/bambu-react.git tu-nuevo-proyecto
+cd tu-nuevo-proyecto
 
-## Expanding the ESLint configuration
+# Instalar dependencias
+pnpm install
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Iniciar servidor de desarrollo
+pnpm dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+**¡Listo!** Servidor corriendo en http://localhost:5173
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 📁 Estructura del Proyecto
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+src/
+  components/
+    ui/          # Componentes básicos (Button, Input, etc.)
+    layout/      # Layouts (Header, Sidebar, etc.)
+    feature/     # Componentes específicos
+  pages/         # Páginas/rutas
+  hooks/         # Custom hooks
+  utils/         # Funciones utilitarias
+  types/         # Tipos TypeScript
+  constants/     # Constantes
+  assets/        # Imágenes, fuentes
+  test/          # Setup de testing
+```
+
+## 🛠 Scripts Disponibles
+
+```bash
+pnpm dev        # Servidor de desarrollo (puerto 5173)
+pnpm build      # Build de producción
+pnpm preview    # Preview del build
+pnpm test       # Ejecutar tests
+pnpm lint       # Linter
+pnpm check      # QA completo (lint + test + verificaciones)
+```
+
+## 🎯 Para Nuevos Proyectos
+
+1. **Cambiar nombre del proyecto** en `package.json`
+2. **Actualizar** `VITE_API_BASE_URL` en `.env`
+3. **Personalizar** constantes en `src/constants/config.ts`
+4. **Cambiar** remote origin: `git remote set-url origin tu-nuevo-repo.git`
+
+## ✨ Características
+
+- ✅ **Tailwind v4** correctamente configurado (no más errores de versión!)
+- ✅ **ESLint + Prettier** con reglas estrictas
+- ✅ **Vitest + React Testing Library** listos
+- ✅ **Husky hooks** para commits limpios
+- ✅ **Alias `@/`** para imports absolutos
+- ✅ **Puerto fijo 5173** (no más puertos aleatorios)
+- ✅ **Scripts de QA** que verifican configuración
+- ✅ **Estructura profesional** lista para equipos
+
+## 📖 Guías de Desarrollo
+
+Lee `CLAUDE.md` para patrones de código, reglas y mejores prácticas.
+
+## 🔧 Requisitos
+
+- **Node.js** 20+
+- **pnpm** 9+ (o npm/yarn)
+
+---
+
+**¡Happy coding!** 🎉
