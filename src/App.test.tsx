@@ -6,7 +6,8 @@ import App from './App';
 describe('App', () => {
   it('renders correctly', () => {
     render(<App />);
-    expect(screen.getByText('Vite + React + Tailwind v4')).toBeInTheDocument();
-    expect(screen.getByText('Tailwind CSS v4 is working! 🎉')).toBeInTheDocument();
+    expect(screen.getByText('Bienvenido')).toBeInTheDocument();
+    expect(screen.getByText(/Base React \+ Vite \+ TS \+ Tailwind v4/)).toBeInTheDocument();
+    expect(screen.getByText('Bambu React')).toBeInTheDocument();
   });
 });

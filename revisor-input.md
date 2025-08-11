@@ -1,113 +1,100 @@
-Buenísimo que lo frenaste. El problema es ESLint v9: ya no lee .eslintrc.* por defecto (usa flat config eslint.config.js). Además, eslint-plugin-tailwindcss no es compatible con Tailwind v4, por eso el otro error.
+Decisiones
+Estructura de carpetas
+Mantener la estructura actual y agregar solo lo faltante ahora: components/ui/, hooks/, utils/, types/, constants/, pages/ y test/.
+src/app/ lo dejamos para cuando metamos router/store. No reestructuramos masivo hoy.
 
-Te dejo el fix definitivo (simple y estable):
+Archivos nuevos vs existentes
 
-Paso a paso
-Limpia configs viejas y el plugin incompatible
+Reemplazar (overwrite) completos:
 
-bash
-Copy
-Edit
+eslint.config.js (flat v9)
+
+.prettierrc, .prettierignore, .editorconfig
+
+stylelint.config.cjs
+
+.github/workflows/ci.yml (si no existe; si existe, crear job nuevo ci y mantener el tuyo)
+
+commitlint.config.cjs
+
+Modificar (merge controlado):
+
+vite.config.ts: solo resolve.alias, server/preview (port/strictPort), y bloque test.
+
+package.json: agregar scripts (predev, check, etc.), engines, packageManager; no borrar scripts propios existentes.
+
+tsconfig.json: activar flags estrictos y paths.
+
+.gitignore: añadir entradas sin quitar las que tengan.
+
+Añadir (si faltan):
+
+src/test/setup.ts, playwright.config.ts, .env.example, src/utils/env.ts (si usan Zod).
+
+Dependencias adicionales
+
+Esenciales (instalar ahora):
+
+Lint/format: eslint@^9 @eslint/js globals typescript-eslint@^8 eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-react-refresh eslint-plugin-unused-imports eslint-plugin-simple-import-sort prettier
+
+CSS lint: stylelint stylelint-config-standard stylelint-config-tailwindcss
+
+QA util: kill-port
+
+Tests base: vitest @testing-library/react @testing-library/user-event @testing-library/jest-dom jsdom
+
+Opcionales (post-setup, cuando las uses):
+
+clsx, tailwind-merge (si empiezan a componer variantes complejas)
+
+zod (si validamos env en runtime)
+
+@playwright/test (si van a correr E2E ahora; si no, más adelante)
+
+Implementación gradual
+Opción B) Paso a paso. Orden sugerido:
+
+CLAUDE.md (reglas ya definidas) – confirmar versión final.
+
+Configs esenciales (ESLint flat, Prettier, Stylelint, Vite strictPort/alias, tsconfig estricto).
+
+Scripts QA y Husky.
+
+Vitest (unit/integration).
+
+Opcionales: Playwright, Zod, clsx/tw-merge.
+
+CI (GitHub Actions).
+
+To-Do para el agente (checklist corto)
+Desinstalar lo incompatible:
 pnpm remove eslint-plugin-tailwindcss
-rm -f .eslintrc.*           # borra cualquier .eslintrc
-Asegura versiones compatibles (flat config)
 
-bash
-Copy
-Edit
-pnpm add -D eslint@^9 @eslint/js globals typescript-eslint@^8 \
-  eslint-plugin-react eslint-plugin-react-hooks \
-  eslint-plugin-react-refresh eslint-plugin-unused-imports \
-  eslint-plugin-simple-import-sort
-Crea eslint.config.js (flat) y olvídate de .eslintrc
+Instalar esenciales (lista del punto 3 “Esenciales”).
 
-js
-Copy
-Edit
-// eslint.config.js
-import js from '@eslint/js';
-import globals from 'globals';
-import react from 'eslint-plugin-react';
-import reactHooks from 'eslint-plugin-react-hooks';
-import reactRefresh from 'eslint-plugin-react-refresh';
-import ts from 'typescript-eslint';
-import unusedImports from 'eslint-plugin-unused-imports';
-import simpleImportSort from 'eslint-plugin-simple-import-sort';
+Aplicar archivos:
 
-export default ts.config(
-  { ignores: ['dist/**', 'node_modules/**'] },
+Overwrite y merge según el punto 2.
 
-  // Reglas para TS/React
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [js.configs.recommended, ...ts.configs.recommended],
-    languageOptions: {
-      ecmaVersion: 2023,
-      sourceType: 'module',
-      globals: { ...globals.browser },
-      parser: ts.parser,
-      parserOptions: { ecmaFeatures: { jsx: true } }, // sin type-check pesado
-    },
-    plugins: {
-      react,
-      'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
-      'unused-imports': unusedImports,
-      'simple-import-sort': simpleImportSort,
-    },
-    settings: { react: { version: 'detect' } },
-    rules: {
-      // React safe patterns
-      'react/jsx-no-useless-fragment': 'warn',
-      'react/no-unstable-nested-components': 'error',
-      'react/jsx-no-constructed-context-values': 'error',
-      'react/no-danger': 'error',
-      'react/function-component-definition': ['warn', {
-        namedComponents: 'arrow-function',
-        unnamedComponents: 'arrow-function',
-      }],
-      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+Confirmar postcss.config.js con @tailwindcss/postcss.
 
-      // Hooks
-      'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'error',
+Crear carpetas faltantes:
+src/components/ui, src/hooks, src/utils, src/types, src/constants, src/pages, src/test.
 
-      // TS + imports
-      '@typescript-eslint/consistent-type-imports': 'error',
-      '@typescript-eslint/no-unused-vars': 'off',
-      'unused-imports/no-unused-imports': 'error',
-      'simple-import-sort/imports': 'error',
-      'simple-import-sort/exports': 'error',
-      'no-duplicate-imports': 'error',
+Verificar:
 
-      // Guardrail CSS (evita App.css del template y *.module.css)
-      'no-restricted-imports': ['error', {
-        paths: [
-          { name: './App.css', message: 'No usar App.css del template; usar src/index.css con Tailwind.' },
-        ],
-        patterns: ['*.module.css'],
-      }],
-      'react/prop-types': 'off',
-      'react/react-in-jsx-scope': 'off',
-    },
-  }
-);
-Deja el script de lint simple
+pnpm format
 
-json
-Copy
-Edit
-// package.json
-{ "scripts": { "lint": "eslint . --max-warnings=0" } }
-Corre:
-
-bash
-Copy
-Edit
 pnpm lint
-Por qué pasó
-Tenías dos formatos de config (flat y legacy) → conflicto.
 
-Con ESLint v9, solo eslint.config.* es el default.
+pnpm stylelint
 
-eslint-plugin-tailwindcss intenta importar APIs internas de Tailwind v3 (resolveConfig) que ya no existen en v4 → crashea. Por eso lo sacamos. Los QA scripts + Stylelint siguen cubriendo el uso correcto de Tailwind.
+pnpm test
+
+pnpm qa:verify
+
+pnpm dev (puerto 5173 fijo, sin saltos)
+
+(Opcional ahora / luego): agregar zod, clsx, tailwind-merge, Playwright, y el workflow de CI.
+
+Con esto respondemos las 4 dudas y dejamos un camino único de implementación sin sorpresas. 
