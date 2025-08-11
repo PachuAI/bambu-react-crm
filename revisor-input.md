@@ -1,3 +1,29 @@
+Buenísimo que lo frenaste. El problema es ESLint v9: ya no lee .eslintrc.* por defecto (usa flat config eslint.config.js). Además, eslint-plugin-tailwindcss no es compatible con Tailwind v4, por eso el otro error.
+
+Te dejo el fix definitivo (simple y estable):
+
+Paso a paso
+Limpia configs viejas y el plugin incompatible
+
+bash
+Copy
+Edit
+pnpm remove eslint-plugin-tailwindcss
+rm -f .eslintrc.*           # borra cualquier .eslintrc
+Asegura versiones compatibles (flat config)
+
+bash
+Copy
+Edit
+pnpm add -D eslint@^9 @eslint/js globals typescript-eslint@^8 \
+  eslint-plugin-react eslint-plugin-react-hooks \
+  eslint-plugin-react-refresh eslint-plugin-unused-imports \
+  eslint-plugin-simple-import-sort
+Crea eslint.config.js (flat) y olvídate de .eslintrc
+
+js
+Copy
+Edit
 // eslint.config.js
 import js from '@eslint/js';
 import globals from 'globals';
@@ -66,3 +92,22 @@ export default ts.config(
     },
   }
 );
+Deja el script de lint simple
+
+json
+Copy
+Edit
+// package.json
+{ "scripts": { "lint": "eslint . --max-warnings=0" } }
+Corre:
+
+bash
+Copy
+Edit
+pnpm lint
+Por qué pasó
+Tenías dos formatos de config (flat y legacy) → conflicto.
+
+Con ESLint v9, solo eslint.config.* es el default.
+
+eslint-plugin-tailwindcss intenta importar APIs internas de Tailwind v3 (resolveConfig) que ya no existen en v4 → crashea. Por eso lo sacamos. Los QA scripts + Stylelint siguen cubriendo el uso correcto de Tailwind.
