@@ -142,11 +142,17 @@ src/
 
 ### Guardas de Ruta
 ```typescript
-// Protección por roles
-requireAuth()           // Usuario autenticado
-requireRole("admin")    // Solo administradores  
-requireRole("operator") // Operadores comerciales
-requireRole("logistics") // Personal logística
+// Protección por roles (tipos centralizados)
+export type Role = 'admin' | 'operador' | 'logistica';
+
+requireAuth()             // Usuario autenticado
+requireRole("admin")      // Solo administradores  
+requireRole("operador")   // Operadores comerciales
+requireRole("logistica")  // Personal logística
+
+// Helper para validar roles
+export const hasRole = (user: User, role: Role) => 
+  user.roles?.includes(role) ?? false;
 ```
 
 ---
@@ -472,6 +478,10 @@ test('flujo completo de cotización', async ({ page }) => {
 ### Cobertura y Métricas
 - **Cobertura mínima**: 80% en utils y hooks críticos
 - **Performance**: Bundle size < 500KB gzipped inicial
+- **Performance budgets por ruta**:
+  - Chunk inicial: < 180KB gzipped
+  - Feature chunks: < 120KB gzipped cada uno
+  - Verificación con `vite-bundle-visualizer` en CI
 - **Lighthouse**: Score > 90 en Performance y Accessibility
 
 ---
@@ -629,14 +639,11 @@ export default defineConfig({
 
 ### Estrategia de Caching
 ```typescript
-// Service Worker para cache de assets estáticos
+// Service Worker: evitar hardcodear assets con hash de Vite
+// Opción A: Usar vite-plugin-pwa para generar manifest automáticamente
+// Opción B: Confiar en React Query + HTTP caching (recomendado)
 const CACHE_NAME = 'bambu-crm-v1';
-const STATIC_ASSETS = [
-  '/',
-  '/assets/index.css',
-  '/assets/index.js',
-  '/assets/icons.svg',
-];
+// STATIC_ASSETS se genera dinámicamente con vite-plugin-pwa o se omite
 
 // React Query para cache de datos de servidor
 const queryClient = new QueryClient({
@@ -816,6 +823,10 @@ VITE_API_BASE_URL=https://api.bambu.com
 VITE_USE_MOCKS=false  
 VITE_APP_VERSION=1.0.0
 VITE_LOG_LEVEL=error
+
+# Backend Laravel .env (para Sanctum)
+SANCTUM_STATEFUL_DOMAINS=localhost,localhost:5173
+CORS_ALLOWED_ORIGINS=http://localhost:5173
 ```
 
 ---
