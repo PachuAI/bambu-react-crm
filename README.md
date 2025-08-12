@@ -1,78 +1,55 @@
-# React Vite TypeScript Tailwind v4 Boilerplate
+# Bambu React CRM
 
-**Stack completo y configurado**: React 19 + Vite + TypeScript + Tailwind v4 + QA completo
+Sistema CRM desarrollado con React 19, Vite, TypeScript y Tailwind v4.
 
-## 🚀 Quick Start
+## 🚀 Desarrollo
 
 ```bash
-# Clonar este boilerplate
-git clone https://github.com/PachuAI/bambu-react.git tu-nuevo-proyecto
-cd tu-nuevo-proyecto
-
 # Instalar dependencias
 pnpm install
 
-# Iniciar servidor de desarrollo
+# Servidor de desarrollo
 pnpm dev
 ```
 
-**¡Listo!** Servidor corriendo en http://localhost:5173
+Servidor: http://localhost:5173
 
-## 📁 Estructura del Proyecto
+## 🛠 Scripts
+
+```bash
+pnpm dev        # Desarrollo
+pnpm build      # Build producción  
+pnpm test       # Tests
+pnpm lint       # Linter
+pnpm check      # QA completo
+```
+
+## 🏗 Stack Tecnológico
+
+- **Frontend**: React 19 + TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind v4
+- **Testing**: Vitest + React Testing Library
+- **QA**: ESLint + Stylelint + Husky
+
+## 📁 Estructura
 
 ```
 src/
-  components/
-    ui/          # Componentes básicos (Button, Input, etc.)
-    layout/      # Layouts (Header, Sidebar, etc.)
-    feature/     # Componentes específicos
-  pages/         # Páginas/rutas
-  hooks/         # Custom hooks
-  utils/         # Funciones utilitarias
-  types/         # Tipos TypeScript
-  constants/     # Constantes
-  assets/        # Imágenes, fuentes
-  test/          # Setup de testing
+  components/ui/      # Componentes base
+  components/layout/  # Layouts
+  components/feature/ # Componentes específicos
+  pages/             # Páginas/rutas
+  hooks/             # Custom hooks
+  utils/             # Utilidades
+  types/             # Tipos TS
 ```
 
-## 🛠 Scripts Disponibles
+## 📋 Requisitos
 
-```bash
-pnpm dev        # Servidor de desarrollo (puerto 5173)
-pnpm build      # Build de producción
-pnpm preview    # Preview del build
-pnpm test       # Ejecutar tests
-pnpm lint       # Linter
-pnpm check      # QA completo (lint + test + verificaciones)
-```
-
-## 🎯 Para Nuevos Proyectos
-
-1. **Cambiar nombre del proyecto** en `package.json`
-2. **Actualizar** `VITE_API_BASE_URL` en `.env`
-3. **Personalizar** constantes en `src/constants/config.ts`
-4. **Cambiar** remote origin: `git remote set-url origin tu-nuevo-repo.git`
-
-## ✨ Características
-
-- ✅ **Tailwind v4** correctamente configurado (no más errores de versión!)
-- ✅ **ESLint + Prettier** con reglas estrictas
-- ✅ **Vitest + React Testing Library** listos
-- ✅ **Husky hooks** para commits limpios
-- ✅ **Alias `@/`** para imports absolutos
-- ✅ **Puerto fijo 5173** (no más puertos aleatorios)
-- ✅ **Scripts de QA** que verifican configuración
-- ✅ **Estructura profesional** lista para equipos
-
-## 📖 Guías de Desarrollo
-
-Lee `CLAUDE.md` para patrones de código, reglas y mejores prácticas.
-
-## 🔧 Requisitos
-
-- **Node.js** 20+
-- **pnpm** 9+ (o npm/yarn)
+- Node.js 20+
+- pnpm 9+
 
 ---
 
-**¡Happy coding!** 🎉
+_Desarrollado con amor para gestionar clientes de manera eficiente_ ❤️
